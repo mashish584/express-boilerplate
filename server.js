@@ -6,6 +6,9 @@ const mongoose = require("mongoose");
 const MongoStore = require("connect-mongo")(session);
 const flash = require("connect-flash");
 
+// routes
+const indexRoute = require("./routes/indexRoute");
+
 // error handler
 const { NotFoundError, ErrorRendering } = require("./handlers/errorHandler.js");
 
@@ -30,7 +33,6 @@ app.use(
 );
 
 app.use((req, res, next) => {
-	res.locals.h = helper;
 	res.locals.user = req.user || null;
 	res.locals.flash = req.flash();
 	next();
@@ -40,9 +42,7 @@ app.use((req, res, next) => {
 app.set("view engine", "ejs");
 
 // Application routes
-app.use("/index", (req, res, next) => {
-	return res.render("index", { title: "Node Application Boilerplate" });
-});
+app.use(indexRoute);
 
 app.post("/post", (req, res, next) => {
 	return res.json({ body: req.body });
